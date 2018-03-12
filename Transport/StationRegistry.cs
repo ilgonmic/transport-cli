@@ -4,42 +4,49 @@ namespace Transport
 {
     class StationRegistry
     {
-        private readonly Dictionary<Station, List<Route>> stationToRoutes;
+        private readonly List<Station> stations;
+        private readonly Dictionary<Id, List<Route>> stationToRoutes;
 
-        public StationRegistry(List<Route> routes)
+        public StationRegistry(Content content)
         {
-            stationToRoutes = new Dictionary<Station, List<Route>>();
-            foreach (var route in routes)
+            stations = content.Stations;
+            stationToRoutes = new Dictionary<Id, List<Route>>();
+            foreach (var route in content.Routes)
             {
                 foreach (var pathElement in route.Path)
                 {
-                    if (stationToRoutes.TryGetValue(pathElement.Station, out List<Route> stationRoute))
+                    if (stationToRoutes.TryGetValue(pathElement.Id, out List<Route> stationRoute))
                     {
                         stationRoute.Add(route);
                     }
                     else
                     {
-                        stationToRoutes.Add(pathElement.Station, new List<Route>() { route });
+                        stationToRoutes.Add(pathElement.Id, new List<Route>() { route });
                     }
                 }
             }
         }
 
-        public Station GetStationByName(string name)
+        public Station GetStationById(Id id)
         {
-            return new Station(name);
+            return stations.Find(station => station.Id.Equals(id));
         }
 
-        public List<Route> GetRoutesByStation(Station station)
+        public Station GetStationByName(string name)
+        {
+            return stations.Find(station => station.Name.Equals(name));
+        }
+
+        public List<Route> GetRoutesByStationId(Id stationId)
         {
             List<Route> result = new List<Route>();
-            if (stationToRoutes.TryGetValue(station, out result))
+            if (stationToRoutes.TryGetValue(stationId, out result))
             {
                 return result;
             }
             else
             {
-                return null;
+                return new List<Route>();
             }
         }
     }

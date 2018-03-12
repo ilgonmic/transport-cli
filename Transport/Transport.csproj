@@ -60,7 +60,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="RoutesReader.cs" />
+    <Compile Include="Content.cs" />
+    <Compile Include="Id.cs" />
+    <Compile Include="ContentReader.cs" />
     <Compile Include="TimeUtil.cs" />
     <Compile Include="Writer.cs" />
     <Compile Include="Program.cs" />

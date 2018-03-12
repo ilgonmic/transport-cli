@@ -1,17 +1,15 @@
 ﻿using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
 using System.IO;
 
 namespace Transport
 {
-    class RoutesReader
+    class ContentReader
     {
-        public static List<Route> Read()
+        public static Content Read()
         {
             string json = ReadFromFile();
 
-            return JsonConvert.DeserializeObject<List<Route>>(json);
+            return JsonConvert.DeserializeObject<Content>(json);
         }
 
         private static string ReadFromFile()

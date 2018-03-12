@@ -7,27 +7,28 @@ namespace Transport
     {
         private readonly StationRegistry stationRegistry;
 
-        public TimetableCalculator(List<Route> routes)
+        public TimetableCalculator(Content content)
         {
-            stationRegistry = new StationRegistry(routes);
+            stationRegistry = new StationRegistry(content);
         }
 
         public List<Timetable> GetTimetableForStation(DateTime time, string stationName)
         {
             Station station = stationRegistry.GetStationByName(stationName);
-            List<Route> routes = stationRegistry.GetRoutesByStation(station);
-
-            List<Timetable> result = new List<Timetable>();
-
-            if (routes == null)
+            if (station == null)
             {
                 return null;
             }
 
+            Id stationId = station.Id;
+            List<Route> routes = stationRegistry.GetRoutesByStationId(stationId);
+
+            List<Timetable> result = new List<Timetable>();
+
             int intTime = TimeUtil.ToInt(time);
             foreach (var route in routes)
             {
-                int pathElementIndex = route.FindPathElementIndex(station);
+                int pathElementIndex = route.FindPathElementIndex(stationId);
                 PathElement pathElement = route.Path[pathElementIndex];
 
                 var intTimeFromA = intTime;
@@ -52,8 +53,8 @@ namespace Transport
                         route.GetLastDepartureFromA(pathElement),
                         route.Interval
                     );
-
-                    result.Add(new Timetable(route.Number, path[lastIndex].Station, waitingTime));
+                    
+                    result.Add(new Timetable(route.Number, stationRegistry.GetStationById(path[lastIndex].Id), waitingTime));
                 }
 
                 int firstIndex = 0;
@@ -66,7 +67,7 @@ namespace Transport
                         route.Interval
                     );
 
-                    result.Add(new Timetable(route.Number, path[firstIndex].Station, waitingTime));
+                    result.Add(new Timetable(route.Number, stationRegistry.GetStationById(path[firstIndex].Id), waitingTime));
                 }
             }
 

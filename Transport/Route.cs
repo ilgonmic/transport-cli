@@ -33,13 +33,13 @@ namespace Transport
 
         private int FullInterval { get; set; }
 
-        public int FindPathElementIndex(Station station)
+        public int FindPathElementIndex(Id id)
         {
             Init();
 
             return Path.FindIndex(delegate (PathElement pathElement)
             {
-                return pathElement.Station.Equals(station);
+                return pathElement.Id.Equals(id);
             });
         }
 
@@ -119,13 +119,13 @@ namespace Transport
 
     class PathElement
     {
-        public PathElement(Station station, int distance)
+        public PathElement(Id id, int distance)
         {
-            Station = station;
+            Id = id;
             Distance = distance;
         }
 
-        public Station Station { get; set; }
+        public Id Id { get; set; }
         public int Distance { get; set; }
 
         internal int DistanceFromA { get; set; }

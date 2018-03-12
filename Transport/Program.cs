@@ -10,10 +10,10 @@ namespace Transport
         {
             //Writer.Write();
 
-            List<Route> routes;
+            Content content;
             try
             {
-                routes = RoutesReader.Read();
+                content = ContentReader.Read();
             }
             catch (FileNotFoundException e)
             {
@@ -26,7 +26,7 @@ namespace Transport
                 return;
             }
 
-            TimetableCalculator timetableCalculator = new TimetableCalculator(routes);
+            TimetableCalculator timetableCalculator = new TimetableCalculator(content);
 
             while (true)
             {
